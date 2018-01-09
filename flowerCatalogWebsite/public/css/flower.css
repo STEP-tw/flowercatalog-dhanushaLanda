@@ -1,0 +1,29 @@
+#heading{
+  text-align: center;
+}
+#sideHeading{
+  color: #ffa500;
+  text-align: right;
+  margin-right: 150px;
+}
+#mainDiv{
+  width: 1000px;
+  height: 600px;
+  padding: 0;
+  margin: auto;
+}
+#image{
+  height: 500px;
+  width : 700px;
+  position: fixed;
+}
+.links{
+  height: 600px;
+  width:200px;
+  float: right;
+}
+.page{
+  margin-top: 30px;
+  margin-left: 250px;
+  margin-right: 250px;
+}

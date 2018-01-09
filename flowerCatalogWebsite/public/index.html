@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title >flowerCatelogPage</title>
+    <link rel="stylesheet" href="css/flower.css">
+    <script type="text/javascript">
+      let hide = function(){
+        document.getElementById('pot').style.visibility = "hidden";
+        setTimeout(function(){
+          document.getElementById('pot').style.visibility ='visible';} , 1000);
+      }
+    </script>
+  </head>
+  <body>
+    <div class="page">
+      <br>
+      <!-- <h1 id="heading" >Flower Catelog Website</h1> -->
+      <hr>
+      <h3 id="sideHeading">Flower Catelog</h3>
+      <hr>
+      <div class="mainDiv">
+        <div id="image">
+          <img src="images/freshorigins.jpg" id="image">
+        </div>
+        <div class="links">
+          <ul>
+            <li><a href="abeliophyllum.html" id="link">Abeliophyllu</a></li>
+            <li><a href="ageratum.html" id="link">Ageratum</a></li>
+          </ul>
+          <img src="images/pot.gif" id='pot' onclick="hide()">
+          <a href="guestBook.html">Guest Book</a>
+        </div>
+      </div>
+    </div>
+
+
+  </body>
+</html>

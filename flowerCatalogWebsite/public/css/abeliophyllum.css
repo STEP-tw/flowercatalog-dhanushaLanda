@@ -1,0 +1,25 @@
+#title{
+  text-align: center;
+  color: #ffa500
+}
+.mainDiv{
+  height: 600px;
+  width: 1000px;
+  padding: 0;
+
+}
+#image{
+  position: fixed;
+  height: 500px;
+  width: 500px;
+}
+.page{
+  margin-right: 100px;
+  margin-left: 100px;
+}
+.text{
+  height: 600px;
+  width: 450px;
+  float: right;
+
+}
