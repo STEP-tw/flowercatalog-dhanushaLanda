@@ -15,12 +15,16 @@ const getDateNameComment = function(query){
 const storeDetails = function(query){
   let fileName = './public/feedBackDetails.html';
   let newFeedBack =  getDateNameComment(query);
-  return fs.readFile(fileName,(err,data)=>{
-    if(err) throw err;
-    let finalFileContent = newFeedBack + data;
-    fs.writeFile(fileName,finalFileContent,(err,data)=>{
-      if(err) throw err;
-    });
-  });
+  let content = fs.readFileSync(fileName,'utf8');
+  let finalFileContent = newFeedBack + content;
+  return fs.writeFileSync(fileName,finalFileContent);
+  //
+  // return fs.readFile(fileName,(err,data)=>{
+  //   if(err) throw err;
+  //   let finalFileContent = newFeedBack + data;
+  //   fs.writeFile(fileName,finalFileContent,(err,data)=>{
+  //     if(err) throw err;
+  //   });
+  // });
 }
 exports.storeDetails = storeDetails;

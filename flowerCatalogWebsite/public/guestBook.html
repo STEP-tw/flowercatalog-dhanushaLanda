@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="css/guestBook.css">
+    <script src="guestBook.js" charset="utf-8"></script>
     <title>guestBook</title>
   </head>
   <body>
@@ -10,11 +10,13 @@
       <h1><a href="index.html"><<</a>Guest Book</h1>
       <h2>Leave a comment</h2>
       Name :
-      <input type="text" name="name" ><br><br>
+      <input type="text" name="name" id="uName"><br><br>
       Comment:
       <textarea name="comment" rows="4" cols="30" required></textarea><br>
       <button type="submit" value="Submit" required>Submit</button><hr>
-      <object type="text/html" data="../feedBackDetails.html"></object><hr>
+      <a href="login.html" id="login">LogInTOAddComment</a>
     </form>
+    <object type="text/html" data="./feedBackDetails.html"></object><hr>
+
   </body>
 </html>

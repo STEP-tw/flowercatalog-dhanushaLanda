@@ -6,7 +6,6 @@ let webApp = require('./webapp');
 let indexContent = fs.readFileSync('public/index.html',"utf8");
 let registeredUsers = ["dhanu"];
 let session = {};
-
 const loadUser = function(req,res){
   let sessionid = req.cookies.sessionid;
   let user = session[sessionid];
@@ -15,13 +14,18 @@ const loadUser = function(req,res){
   }
 }
 
+const redirectToLoginPost = function(req,res){
+  if(req.url == '/login.html' && req.method == "POST") res.redirect('/login')
+}
+
 const redirectLoggedInUserToGuestBook = function(req,res){
   console.log(registeredUsers);
-  if(req.url=='/guestBook.html' && !req.user) res.redirect('/login');
-  if(req.url == '/guestBook.html' && req.method=='POST'){
-    storeDetails(req.body);
-    res.redirect('guestBook.html');
+  if(req.url=='/guestBook.html' && !req.user){
+    // handleGuestBook();
+
+    res.redirect('/login.html');
   }
+
 };
 
 const fileNotFound = function(fileName){
@@ -67,6 +71,7 @@ const fileHandler = function(req,res){
     return;
   }
   let content = fs.readFileSync(resource);
+
   serveResource(resource,res,content);
 }
 const respondLoginFailed = function(res){
@@ -77,15 +82,12 @@ let app = webApp.create();
 
 app.use(loadUser);
 
+app.use(redirectToLoginPost);
+
 app.use(redirectLoggedInUserToGuestBook);
 
 app.use(fileHandler);
 
-app.get('/login',(req,res)=>{
-  res.setHeader('content-type','text/html');
-  res.write('<form method="POST"> Name : <input name="userName"><br> <input type="submit"></form>');
-  res.end();
-});
 
 const processLoginRequest = function(req,res) {
   let username = req.body.username;
@@ -106,8 +108,14 @@ app.post('/login',(req,res)=>{
   res.end();
 });
 
-app.post('/guestBook.html',(req,res)=>{
-})
+app.post('/guestBook',(req,res)=>{
+  if(req.url == '/guestBook.html' && req.method=='POST'){
+    console.log(req.body);
+    let text = req.body;
+    storeDetails(req.body);
+    res.redirect('guestBook.html');
+  }
+});
 let PORT = 8888;
 let server = http.createServer(app);
 server.listen(PORT,(e)=>console.log(`server listening at ${PORT}`));
