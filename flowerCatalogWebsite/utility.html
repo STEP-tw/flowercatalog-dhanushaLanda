@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./cssFiles/form.css">
+    <script src="./scripts/guestBook.js" charset="utf-8"></script>
+    <title>Form</title>
+  </head>
+  <body>
+    <div id="heading">
+      <center>
+        <a href="index.html"> << </a> <span style="color:orange;">Guest Book</span>
+      </center>
+    </div>
+    <hr />
+    <br />
+    <div id="formArea">
+      <form id = 'comment_form'>
+          Name: <input type="text" id="name" required><br />
+          Comment: <br />
+          <textarea rows="10" cols="80" id="comment" required></textarea>
+          <br />
+          <input type='button' id='commentButton' value='Submit'></input>
+
+      </form>
+      <br />
+      <div id='login_status'>
+
+      </div>
+      <a href="/logout"><button>Logout</button></a>
+      <a href="/login.html"><button>Login</button></a>
+      <br />
+    </div>
+    <table>
+
+    </table>
+
+    <div id="commentArea">
+      <br />
+      <hr/>
+      <div id='freshComments'>
+
+      </div>
+
+    </div>
+  </body>
+</html>

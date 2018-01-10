@@ -1,11 +1,15 @@
 const fs = require('fs');
 const http = require('http');
-const storeDetails = require('./feedBackDetails.js').storeDetails;
-
 let webApp = require('./webapp');
+
+const CommentHandler = require('./commentsHandler.js');
+let commentHandler = new CommentHandler('./comments.json');
+commentHandler.loadComments();
+
 let indexContent = fs.readFileSync('public/index.html',"utf8");
-let registeredUsers = ["dhanu"];
+let registeredUsers = ["dhanu","pavani","aditi"];
 let session = {};
+
 const loadUser = function(req,res){
   let sessionid = req.cookies.sessionid;
   let user = session[sessionid];
@@ -14,18 +18,9 @@ const loadUser = function(req,res){
   }
 }
 
-const redirectToLoginPost = function(req,res){
-  if(req.url == '/login.html' && req.method == "POST") res.redirect('/login')
-}
 
 const redirectLoggedInUserToGuestBook = function(req,res){
-  console.log(registeredUsers);
-  if(req.url=='/guestBook.html' && !req.user){
-    // handleGuestBook();
-
-    res.redirect('/login.html');
-  }
-
+  if(req.url=='/guestBook.html' && !req.user) res.redirect('./feedBackDetails.html');
 };
 
 const fileNotFound = function(fileName){
@@ -52,16 +47,11 @@ const getResourcePath = function(resource){
   return './public'+resource;
 }
 
-
 const serveResource = function(resource,res,content){
   let resourceType = getContentType(resource);
   res.setHeader('content-type',resourceType);
   res.write(content);
   res.end();
-}
-
-const serveForGuestBook = function(req,res){
-  res.redirect('/login');
 }
 
 const fileHandler = function(req,res){
@@ -71,32 +61,47 @@ const fileHandler = function(req,res){
     return;
   }
   let content = fs.readFileSync(resource);
-
   serveResource(resource,res,content);
 }
+
 const respondLoginFailed = function(res){
-  res.redirect('/login')
+  res.redirect('/login.html')
+}
+
+const storeComments = function(req,res){
+  commentHandler.storeComments(req.body);
+  req.statusCode = 200;
+  res.end();
+}
+
+const getLogedUserName = function(session,sessionid){
+  return session[sessionid];
+}
+
+const toHtmlTable = function(commentRecord) {
+  return `<p>${commentRecord.date} ${commentRecord.name} ${commentRecord.comment}</p>`;
+}
+
+const processComments = function(req,res){
+  let  serverResponse={};
+  let sessionid = req.cookies.sessionid;
+  serverResponse.userName =getLogedUserName(session,sessionid);
+  console.log(commentHandler.comments);
+  serverResponse.comments = commentHandler.mapComments(toHtmlTable).join('<br/>');
+  console.log(serverResponse);
+  res.write(JSON.stringify(serverResponse));
+  res.end();
 }
 
 let app = webApp.create();
 
 app.use(loadUser);
 
-app.use(redirectToLoginPost);
-
 app.use(redirectLoggedInUserToGuestBook);
 
 app.use(fileHandler);
 
-
-const processLoginRequest = function(req,res) {
-  let username = req.body.username;
-  if(!registeredUsers.includes(username)) return respondLoginFailed(res);
-  let sessionid = new Date().getTime();
-  session[sessionid] = username;
-  res.setHeader('Set-Cookie',`sessionid=${sessionid}`);
-  responseWithGuestBook(res);
-}
+app.get('/comments',processComments);
 
 app.post('/login',(req,res)=>{
   let userName = req.body.userName;
@@ -108,14 +113,8 @@ app.post('/login',(req,res)=>{
   res.end();
 });
 
-app.post('/guestBook',(req,res)=>{
-  if(req.url == '/guestBook.html' && req.method=='POST'){
-    console.log(req.body);
-    let text = req.body;
-    storeDetails(req.body);
-    res.redirect('guestBook.html');
-  }
-});
+app.post('/submitForm',storeComments);
+
 let PORT = 8888;
 let server = http.createServer(app);
 server.listen(PORT,(e)=>console.log(`server listening at ${PORT}`));
